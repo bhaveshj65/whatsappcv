@@ -1,117 +1,259 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WhatsApp Chat Viewer</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{height:100vh;overflow:hidden;background:#111b21}
-#uploadContainer{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:#111b21}
-.card{background:#202c33;padding:24px;border-radius:12px;color:#fff;width:90%;max-width:420px}
-input[type=file],select,button{width:100%;margin-top:10px;padding:12px;border-radius:8px}
-button{background:#00a884;color:#fff;border:none;cursor:pointer}
-#participantSelection{display:none}
-#chatScreen{display:none;height:100vh;flex-direction:column}
-.header{height:60px;background:#202c33;color:#fff;display:flex;align-items:center;padding:0 12px}
-.avatar{width:40px;height:40px;border-radius:50%;background:#6b7c85;margin:0 12px}
-.chat-container{flex:1;overflow:auto;padding:12px;background:
-linear-gradient(rgba(17,27,33,.92),rgba(17,27,33,.92)),
-url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop');
-background-size:cover}
-.date{text-align:center;margin:12px 0}
-.date span{background:#182229;color:#fff;padding:6px 12px;border-radius:10px;font-size:12px}
-.msg{max-width:80%;padding:8px 10px;border-radius:10px;margin-bottom:4px}
-.left{background:#202c33;color:#fff;margin-right:auto}
-.right{background:#005c4b;color:#fff;margin-left:auto}
-.sender{font-size:12px;color:#53bdeb;font-weight:bold}
-.time{text-align:right;font-size:11px;color:#ccc}
-.bottom{height:60px;background:#202c33;display:flex;align-items:center;padding:0 10px}
-.bottom input{flex:1;padding:10px;border-radius:20px;border:none}
-</style>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width,initial-scale=1">
+   <title>WhatsApp Chat Viewer</title>
+   <style>
+      * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: Arial, sans-serif
+      }
+
+      body {
+         height: 100vh;
+         overflow: hidden;
+         background: #111b21
+      }
+
+      #uploadContainer {
+         position: fixed;
+         inset: 0;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         background: #111b21
+      }
+
+      .card {
+         background: #202c33;
+         padding: 24px;
+         border-radius: 12px;
+         color: #fff;
+         width: 90%;
+         max-width: 420px
+      }
+
+      input[type=file],
+      select,
+      button {
+         width: 100%;
+         margin-top: 10px;
+         padding: 12px;
+         border-radius: 8px
+      }
+
+      button {
+         background: #00a884;
+         color: #fff;
+         border: none;
+         cursor: pointer
+      }
+
+      #participantSelection {
+         display: none
+      }
+
+      #chatScreen {
+         display: none;
+         height: 100vh;
+         flex-direction: column
+      }
+
+      .header {
+         height: 60px;
+         background: #202c33;
+         color: #fff;
+         display: flex;
+         align-items: center;
+         padding: 0 12px
+      }
+
+      .avatar {
+         width: 40px;
+         height: 40px;
+         border-radius: 50%;
+         background: #6b7c85;
+         margin: 0 12px
+      }
+
+      .chat-container {
+         flex: 1;
+         overflow: auto;
+         padding: 12px;
+         background:
+            linear-gradient(rgba(17, 27, 33, .92), rgba(17, 27, 33, .92)),
+            url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop');
+         background-size: cover
+      }
+
+      .date {
+         text-align: center;
+         margin: 12px 0
+      }
+
+      .date span {
+         background: #182229;
+         color: #fff;
+         padding: 6px 12px;
+         border-radius: 10px;
+         font-size: 12px
+      }
+
+      .msg {
+         max-width: 80%;
+         padding: 8px 10px;
+         border-radius: 10px;
+         margin-bottom: 4px
+      }
+
+      .left {
+         background: #202c33;
+         color: #fff;
+         margin-right: auto
+      }
+
+      .right {
+         background: #005c4b;
+         color: #fff;
+         margin-left: auto
+      }
+
+      .sender {
+         font-size: 12px;
+         color: #53bdeb;
+         font-weight: bold
+      }
+
+      .time {
+         text-align: right;
+         font-size: 11px;
+         color: #ccc
+      }
+
+      .bottom {
+         height: 60px;
+         background: #202c33;
+         display: flex;
+         align-items: center;
+         padding: 0 10px
+      }
+
+      .bottom input {
+         flex: 1;
+         padding: 10px;
+         border-radius: 20px;
+         border: none
+      }
+   </style>
 </head>
+
 <body>
 
-<div id="uploadContainer">
-<div class="card">
-<h2>WhatsApp Chat Viewer</h2>
-<input type="file" id="fileInput" accept=".txt">
-<div id="participantSelection">
-<select id="meSelector"></select>
-<button id="openChatBtn">Open Chat</button>
-</div>
-</div>
-</div>
+   <div id="uploadContainer">
+      <div class="card">
+         <h2>WhatsApp Chat Viewer</h2>
+         <input type="file" id="fileInput" accept=".txt">
+         <div id="participantSelection">
+            <select id="meSelector"></select>
+            <button id="openChatBtn">Open Chat</button>
+         </div>
+      </div>
+   </div>
 
-<div id="chatScreen">
-<div class="header">
-<div>←</div>
-<div class="avatar"></div>
-<div id="contactName">Chat</div>
-</div>
-<div id="chatContainer" class="chat-container"></div>
-<div class="bottom"><input readonly placeholder="Message"></div>
-</div>
+   <div id="chatScreen">
+      <div class="header">
+         <div>←</div>
+         <div class="avatar"></div>
+         <div id="contactName">Chat</div>
+      </div>
+      <div id="chatContainer" class="chat-container"></div>
+      <div class="bottom"><input readonly placeholder="Message"></div>
+   </div>
 
-<script>
-let parsedMessages=[];
+   <script>
+      let parsedMessages = [];
 
-document.getElementById('fileInput').addEventListener('change',e=>{
- const file=e.target.files[0];
- if(!file)return;
- const r=new FileReader();
- r.onload=x=>parseChat(x.target.result);
- r.readAsText(file);
-});
+      document.getElementById('fileInput').addEventListener('change', e => {
+         const file = e.target.files[0];
+         if (!file) return;
+         const r = new FileReader();
+         r.onload = x => parseChat(x.target.result);
+         r.readAsText(file);
+      });
 
-function parseChat(text){
- const regex=/^(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}),?\s+(\d{1,2}:\d{2}(?:\s?[aApP][mM])?)\s+-\s([^:]+):\s(.*)$/;
- const msgs=[];
- let cur=null;
+      function parseChat(text) {
+         const androidRegex =
+            /^(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}),?\s+(\d{1,2}:\d{2}(?::\d{2})?(?:\s?[aApP][mM])?)\s+-\s([^:]+):\s(.*)$/;
 
- text.split(/\r?\n/).forEach(line=>{
-   const m=line.match(regex);
-   if(m){
-      cur={date:m[1],time:m[2],sender:m[3],text:m[4]};
-      msgs.push(cur);
-   }else if(cur){
-      cur.text+="\n"+line;
-   }
- });
+         const iphoneRegex =
+            /^\[(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}),\s+(\d{1,2}:\d{2}(?::\d{2})?\s?[aApP][mM])\]\s([^:]+):\s(.*)$/;
 
- parsedMessages=msgs;
+         const msgs = [];
+         let current = null;
 
- const senders=[...new Set(msgs.map(x=>x.sender))];
- const sel=document.getElementById('meSelector');
- sel.innerHTML=senders.map(s=>`<option>${s}</option>`).join('');
- document.getElementById('participantSelection').style.display='block';
-}
+         text.split(/\r?\n/).forEach(line => {
 
-document.getElementById('openChatBtn').onclick=()=>{
- const me=document.getElementById('meSelector').value;
- const others=[...new Set(parsedMessages.map(x=>x.sender).filter(x=>x!==me))];
- document.getElementById('contactName').innerText=others.join(', ')||me;
+            let match = line.match(androidRegex);
 
- document.getElementById('uploadContainer').style.display='none';
- document.getElementById('chatScreen').style.display='flex';
+            if (!match) {
+               match = line.match(iphoneRegex);
+            }
 
- let lastDate='';
- const chat=document.getElementById('chatContainer');
- chat.innerHTML='';
+            if (match) {
 
- parsedMessages.forEach(m=>{
-   if(m.date!==lastDate){
-      chat.innerHTML+=`<div class="date"><span>${m.date}</span></div>`;
-      lastDate=m.date;
-   }
-   chat.innerHTML+=`
-   <div class="msg ${m.sender===me?'right':'left'}">
+               current = {
+                  date: match[1],
+                  time: match[2],
+                  sender: match[3],
+                  text: match[4]
+               };
+
+               messages.push(current);
+
+            } else if (current) {
+
+               current.text += "\n" + line;
+            }
+         });
+
+         parsedMessages = msgs;
+
+         const senders = [...new Set(msgs.map(x => x.sender))];
+         const sel = document.getElementById('meSelector');
+         sel.innerHTML = senders.map(s => `<option>${s}</option>`).join('');
+         document.getElementById('participantSelection').style.display = 'block';
+      }
+
+      document.getElementById('openChatBtn').onclick = () => {
+         const me = document.getElementById('meSelector').value;
+         const others = [...new Set(parsedMessages.map(x => x.sender).filter(x => x !== me))];
+         document.getElementById('contactName').innerText = others.join(', ') || me;
+
+         document.getElementById('uploadContainer').style.display = 'none';
+         document.getElementById('chatScreen').style.display = 'flex';
+
+         let lastDate = '';
+         const chat = document.getElementById('chatContainer');
+         chat.innerHTML = '';
+
+         parsedMessages.forEach(m => {
+            if (m.date !== lastDate) {
+               chat.innerHTML += `<div class="date"><span>${m.date}</span></div>`;
+               lastDate = m.date;
+            }
+            chat.innerHTML += `
+   <div class="msg ${m.sender === me ? 'right' : 'left'}">
       <div class="sender">${m.sender}</div>
       <div>${m.text}</div>
       <div class="time">${m.time}</div>
    </div>`;
- });
-};
-</script>
+         });
+      };
+   </script>
 </body>
+
 </html>
